@@ -9,6 +9,7 @@ const faker = require('faker');
 const cors=require('cors')
 const {generateShoppingItemData}=require('./database/fakeData')
 const sendOTP=require('./sendingOtp')
+const PORT=process.env.PORT || 3000
 
 const app=express()
 app.use(bodyParser.json())
@@ -112,7 +113,7 @@ app.post('/signUp',async(req,res)=>{
   }
 
  })
- app.listen(3000,()=>{
+ app.listen(PORT,()=>{
   console.log("Server running at port 3000")
  });
  
