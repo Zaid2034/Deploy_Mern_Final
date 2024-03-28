@@ -11,6 +11,7 @@ export function Login(){
     const[email,setEmail]=useState("");
     const [redirectToItems, setRedirectToItems] = useState(false);
     const [loading,setLoading]=useState(false)
+    const [verified,setVerified]=useState(false)
     const handleSignIn=async ()=>{
         ClearLoggedInUsername();
                 if(name=="" || password==""){
@@ -19,7 +20,7 @@ export function Login(){
                 else{
                     setLoading(true)
                     try{
-                        const response = await fetch('http://localhost:3000/signIn',{
+                        const response = await fetch('https://deploy-mern-backend1-1.onrender.com/signIn',{
                             method:'POST',
                             body:JSON.stringify({
                                 name:name,
@@ -38,7 +39,9 @@ export function Login(){
                             else{
                                 SetToken(json.token)
                                 //alert("User Login")
-                                window.location.href = "/items"
+                                alert("User Logged In successfully")
+                                setVerified(true)
+                                console.log(`Verification is ${verified}`)
                                 setRedirectToItems(true);
                             }  
                         })
@@ -63,6 +66,11 @@ export function Login(){
                 </div>
             ):(
                 <div>
+                    {verified?(<div>
+                           <p>User Logged in successfully</p>
+                           <Link to='/items'>Go to shopping item page</Link>
+                    </div>):(
+                        <div>
                     <input style={{
                         padding:10,
                         margin:10
@@ -86,12 +94,12 @@ export function Login(){
                             margin:10
                         }} onClick={handleSignIn
                             }>Login</button>
-                        
                         <Link style={{margin:10}} to="/">SignUp</Link>
                         </div>
-                        
-                    
                 </div>
+                )}
+                </div>
+                
             )}
         </div>
     )

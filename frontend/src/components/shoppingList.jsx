@@ -25,7 +25,7 @@ export function ShoppingItem(){
         setLoading1(true)
         console.log(`loading is:${loading1}`)
         try{
-            await fetch('http://localhost:3000/shopping_items',{
+            await fetch('https://deploy-mern-backend1-1.onrender.com/shopping_items',{
                 method:'GET',
                 headers:{
                     "Authorization":`Bearer ${token}`,
@@ -69,7 +69,10 @@ export function ShoppingItem(){
                     background: item.mark ? 'black' : 'white', // Conditionally set background color
                 }}
                 onClick={async()=>{
-                    await fetch('http://localhost:3000/shopping_items_update',{
+                    const updatedItems = [...items];
+                    updatedItems[index].mark = !updatedItems[index].mark;
+                    setItems(updatedItems); 
+                    await fetch('https://deploy-mern-backend1-1.onrender.com/shopping_items_update',{
                             method:'POST',
                             body:JSON.stringify({
                                 id:item.id,
@@ -79,9 +82,7 @@ export function ShoppingItem(){
                                 "Content-type":"application/json"
                             }
                         })
-                    const updatedItems = [...items];
-                    updatedItems[index].mark = !updatedItems[index].mark;
-                    setItems(updatedItems); 
+                    
                 }}
             ></div>
             <p>{item.name}</p>

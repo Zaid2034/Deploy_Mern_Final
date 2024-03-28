@@ -102,7 +102,7 @@ app.post('/signUp',async(req,res)=>{
   console.log(`generated Otp ${generatedOtp}`)
   console.log(`user otp: ${otp}`)
 
-  if(generatedOtp!=otp){
+  if(generatedOtp==otp){
     res.json({
       msg:"Email verified successfully"
     })

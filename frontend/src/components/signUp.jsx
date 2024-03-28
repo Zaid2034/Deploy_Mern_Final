@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { SetToken } from "./storingToken";
 import "../App.css"
 const otpForVerification3=Math.floor(10000000 + Math.random() * 90000000);
@@ -15,6 +15,7 @@ export function SignUp({ onSignup }) {
     const [otp, setOtp] = useState("");
     const [verificationStep, setVerificationStep] = useState(false);
     const [loading,setLoading]=useState(false)
+    const [verified,setVerified]=useState(false)
     const otpForVerification2=otpForVerification3
     const handleSignUp = async () => {
         if (name === "" || email === "" || password === "") {
@@ -23,7 +24,7 @@ export function SignUp({ onSignup }) {
         }
         setLoading(true)
         try {
-            const response = await fetch("http://localhost:3000/signUp", {
+            const response = await fetch("https://deploy-mern-backend1-1.onrender.com/signUp", {
                 method: "POST",
                 body: JSON.stringify({
                     name: name,
@@ -36,11 +37,11 @@ export function SignUp({ onSignup }) {
             });
             const json = await response.json();
             if (json.msg === "User created Successfully") {
-                //alert("User created Successfully. Check your email for verification.");
+                alert("User created Successfully. Check your email for verification.");
                 setVerificationStep(true);
                 SetToken(json.token)
             //sendOTP(email,otpForVerification);
-                const response2=await fetch("http://localhost:3000/sendOtp",{
+                const response2=await fetch("https://deploy-mern-backend1-1.onrender.com/sendOtp",{
                     method:'POST',
                     body: JSON.stringify({
                         email: email,
@@ -62,7 +63,7 @@ export function SignUp({ onSignup }) {
     const handleVerify = async () => {
         
         try {
-            const response = await fetch("http://localhost:3000/verifyEmail", {
+            const response = await fetch("https://deploy-mern-backend1-1.onrender.com/verifyEmail", {
                 method: "POST",
                 body: JSON.stringify({
                     email: email,
@@ -77,7 +78,7 @@ export function SignUp({ onSignup }) {
             if (json.msg === "Email verified successfully") {
                 alert("Email verified successfully. You can now access the items page.");
                 onSignup(name);
-                window.location.href = "/items";
+                setVerified(true)
             } else {
                 alert(json.msg);
             }
@@ -99,7 +100,17 @@ export function SignUp({ onSignup }) {
                             margin:10
                         }}
                     /><br/>
-                    <button style={{margin:10,padding:10}} onClick={handleVerify}>Verify</button>
+                    <div>
+                        {verified?(
+                        <div
+                        style={{display:'flex',flexDirection:'row',alignItems:'center'}}
+                        >
+                        <button style={{margin:10,padding:10}}>User Verified</button>
+                        <Link style={{margin:10,padding:10}} to ='/items'>Go to shopping list page</Link>
+                        </div>
+                        ):(<button style={{margin:10,padding:10}} onClick={handleVerify}>Verify</button>)}
+                    </div>
+                    
                 </div>
             ) : (
                 <div>
